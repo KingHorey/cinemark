@@ -1,0 +1,125 @@
+import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import { myAxios } from "./middleware";
+
+import { jwtDecode } from "jwt-decode";
+import type { JwtPayload } from "jwt-decode";
+
+declare module "next-auth" {
+  interface User {
+    accessToken: string;
+    refreshToken: string;
+    id: string;
+    last_name: string;
+    first_name: string;
+  }
+
+  interface Session {
+    user: {
+      accessToken: string;
+      refreshToken: string;
+      id: string;
+      first_name: string;
+      last_name: string;
+    };
+  }
+}
+
+interface jwtPayloads extends JwtPayload {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+}
+
+export const { handlers, signIn, signOut, auth } = NextAuth({
+  pages: {
+    signIn: "/login",
+  },
+  providers: [
+    Credentials({
+      credentials: {
+        email: {},
+        password: {},
+      },
+      authorize: async (credentials) => {
+        try {
+          const { data } = await myAxios.post(
+            "/user/token/",
+            JSON.stringify({
+              email: credentials.email,
+              password: credentials.password,
+            })
+          );
+
+          if (!data.access || !data.refresh) {
+            throw new Error("An error occurred");
+          }
+          const userInfo: jwtPayloads = jwtDecode(data.access);
+          return {
+            accessToken: data.access,
+            refreshToken: data.refresh,
+            id: userInfo.id,
+            expires_at: userInfo.exp,
+            first_name: userInfo.first_name,
+            last_name: userInfo.last_name,
+            email: userInfo.email,
+          };
+        } catch (err) {
+          return null;
+        }
+      },
+    }),
+  ],
+  callbacks: {
+    async jwt({ token, user }) {
+      console.log("existing token", token);
+      console.log("user: ", user);
+      if (token.access_token) {
+        return token;
+      }
+      if (user) {
+        // first time logging in
+        const expires = jwtDecode(user.accessToken);
+        console.log("======================");
+        console.log("First time log in: ", user);
+        console.log("======================");
+        return {
+          ...token,
+          access_token: user.accessToken,
+          refresh_token: user.refreshToken,
+          expires_at: expires?.exp ? expires.exp * 1000 : null,
+        };
+      } else if (Date.now() < token?.expires_at) {
+        return token;
+      } else {
+        if (!token.refresh_token) throw new Error("Missing refresh token");
+        try {
+          const { data } = await myAxios.post("api/token/refresh/", {
+            refresh: token.access_token,
+          });
+          const decoded_token = jwtDecode(data.access);
+          return {
+            ...token,
+            expires_at: decoded_token?.exp && decoded_token.exp,
+            access_token: decoded_token,
+            refresh_token: "",
+          };
+        } catch {
+          throw new Error("Re-authentication failed");
+        }
+      }
+    },
+    async session({ session, token }) {
+      const decoded_token = jwtDecode(token.access_token);
+      session.user.first_name = decoded_token.first_name;
+      session.user.last_name = decoded_token.last_name;
+      session.user.accessToken = token.access_token;
+      session.user.refreshToken = token.refresh_token;
+      // console.log("session: ", session);
+      return session;
+    },
+  },
+  session: { strategy: "jwt" },
+  secret: "EFIuABVGKRPnc9LIbN9sjG/4pXD/MuMNWtyVGcghPd8=",
+});
