@@ -30,9 +30,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-#n14lj!!fkt12zi^-h!m1^26bxnq++b3x@n8@hxiqyawc#z_z_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["https://cinemark-obpx.onrender.com"]
+ALLOWED_HOSTS = ["cinemark-obpx.onrender.com"]
 
 
 # Application definition
