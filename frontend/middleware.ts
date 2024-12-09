@@ -12,7 +12,7 @@ import { jwtDecode } from "jwt-decode";
 
 console.log(process.env.NEXT_BASE_URL)
 export const myAxios = axios.create({
-  baseURL: process.env.NEXT_BASE_URL,
+  baseURL: process.env.NEXT_BASE_URL || "http://localhost:8000/api",
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",

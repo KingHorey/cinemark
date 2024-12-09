@@ -55,10 +55,10 @@ const ProfileWrapper = ({
       user.id ? user?.id : ""
     );
     if (response.status === 200) {
-      toast.success(response.message);
+      toast.success("User Information succesfully updated");
     } else {
       console.log(response.status, response.message[0]);
-      toast.error(response.message[0]);
+      toast.error(response.message[0] as string);
       revalidatePath("/profile");
     }
   };

@@ -14,9 +14,12 @@ import UpcomingMoviesWrapper from "./upcoming/upcomingWrapper";
 export const revalidate = 60 * 60; // Revalidate this page every 60 seconds
 
 async function fetchMovies(type: string) {
-  const response = await fetch(`${process.env.BASE_URL}/movies?type=${type}`, {
-    next: { revalidate: 3600 }, // Incremental Static Regeneration
-  });
+  const response = await fetch(
+    `${process.env.NEXT_BASE_URL}/movies?type=${type}`,
+    {
+      next: { revalidate: 3600 }, // Incremental Static Regeneration
+    }
+  );
 
   if (!response.ok) {
     throw new Error("Failed to fetch data");

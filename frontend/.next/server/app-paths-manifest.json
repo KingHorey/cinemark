@@ -4,15 +4,15 @@
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/page": "app/page.js",
   "/(authentication)/login/page": "app/(authentication)/login/page.js",
+  "/(authentication)/register/page": "app/(authentication)/register/page.js",
   "/(main)/movies/[id]/page": "app/(main)/movies/[id]/page.js",
   "/(main)/movies/page": "app/(main)/movies/page.js",
-  "/(authentication)/register/page": "app/(authentication)/register/page.js",
   "/(main)/search/page": "app/(main)/search/page.js",
   "/(main)/series/[id]/page": "app/(main)/series/[id]/page.js",
   "/(main)/subscriptions/page": "app/(main)/subscriptions/page.js",
   "/(main)/support/page": "app/(main)/support/page.js",
   "/(main)/profile/(overview)/page": "app/(main)/profile/(overview)/page.js",
   "/(main)/profile/liked-videos/page": "app/(main)/profile/liked-videos/page.js",
-  "/(main)/profile/preferences/page": "app/(main)/profile/preferences/page.js",
-  "/(main)/profile/reviews/page": "app/(main)/profile/reviews/page.js"
+  "/(main)/profile/reviews/page": "app/(main)/profile/reviews/page.js",
+  "/(main)/profile/preferences/page": "app/(main)/profile/preferences/page.js"
 }

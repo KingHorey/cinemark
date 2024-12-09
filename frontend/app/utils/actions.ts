@@ -34,6 +34,7 @@ export const handleRegistration = async (
       message: "Registration successful",
     };
   } catch (err: any) {
+    console.error(err.message, err.response);
     return {
       status: 400,
       message: err.response.data.data.email[0],
