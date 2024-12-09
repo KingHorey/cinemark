@@ -9,8 +9,10 @@ import { jwtDecode } from "jwt-decode";
 // export { auth as middleware } from "@/auth";
 // import { auth } from "@/auth";
 
+
+console.log(process.env.NEXT_BASE_URL)
 export const myAxios = axios.create({
-  baseURL: "http://localhost:8000/api",
+  baseURL: process.env.NEXT_BASE_URL,
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
