@@ -13,6 +13,7 @@ import string
 import base64
 
 class RegisterUserSerializer(serializers.ModelSerializer):
+    # password = serializers.CharField(write_only=True)
     class Meta:
         model = User
         fields = ["first_name", "last_name", "email", "password"]
@@ -22,6 +23,7 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         last_name = validated_data.pop('last_name', None)
         email = validated_data.pop('email', None)
         password = validated_data.pop('password', None)
+        print("Password in serializers: ", password)
         user = User.objects.create(first_name=first_name,
                                    last_name=last_name, email=email,
                                    password=password)

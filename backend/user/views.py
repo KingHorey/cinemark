@@ -21,20 +21,17 @@ class RegisterUserView(CreateAPIView):
     def create(self, request, *args, **kwargs):
         request_data = request.data
         confirm_password = request_data.pop("confirm_password", None)
-        print("This is the received data: ", request_data)
         serializer = self.get_serializer(data=request_data)
         if serializer.is_valid(raise_exception=False):
             serializer.save()
             return Response({'data': serializer.data},
                             status=status.HTTP_201_CREATED)
-        print(serializer.errors)
         return Response({'data': serializer.errors},
                         status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginView(TokenObtainPairView):
     serializer_class = LoginViewSerializer
-
 
 class RefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):

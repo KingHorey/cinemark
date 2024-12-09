@@ -30,9 +30,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-#n14lj!!fkt12zi^-h!m1^26bxnq++b3x@n8@hxiqyawc#z_z_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ["cinemark-obpx.onrender.com"]
+ALLOWED_HOSTS = ["cinemark-obpx.onrender.com", 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -112,7 +112,7 @@ AUTH_USER_MODEL = 'user.User'
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
+        "LOCATION": "redis://red-ctbe8ppopnds73enltmg:6379",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             "TIMEOUT": 900
@@ -153,7 +153,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_HOSTS = ["*"]
-CORS_ALLOWED_ORIGINS = ['http://localhost:3000', ]
+CORS_ALLOWED_ORIGINS = ['http://localhost:3000']
 
 
 
@@ -182,7 +182,7 @@ WSGI_APPLICATION = 'cinemark.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
+    #  'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': BASE_DIR / 'db.sqlite3',
     # }

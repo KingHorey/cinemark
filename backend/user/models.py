@@ -5,7 +5,6 @@ from django.contrib.auth.models import UserManager, AbstractUser, PermissionsMix
 from uuid import uuid4
 
 
-
 class CustomUserManager(UserManager):
 
     def _prefill_user(self, email=None, password=None, **fields):
@@ -13,8 +12,10 @@ class CustomUserManager(UserManager):
             raise ValueError("An Email address needs to be provided")
         user = self.model(email=email, **fields)
         if password is None:
+            print("There is no password: ", password)
             user.set_unusable_password()
         else:
+            print("There is a password", password)
             user.set_password(password)
         user.save(using=self._db)
         return user
@@ -24,6 +25,7 @@ class CustomUserManager(UserManager):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_active', True)
         extra_fields.setdefault('is_superuser', False)
+        print("Received password", password)
         user = self._prefill_user(email, password, **extra_fields)
         return user
 
@@ -58,7 +60,7 @@ class User(AbstractUser, PermissionsMixin):
 
 
     @image.setter
-    def image(self, value):
+    def imagec(self, value):
         self._image = value
 
     def __str__(self):
