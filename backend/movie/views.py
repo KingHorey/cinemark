@@ -126,8 +126,7 @@ class GetAllMovies(ListAPIView):
                 response_list.append({
                     'id': id,
                     "original_name": original_name,
-                    'poster_path': f"https://image.tmdb.org/t/p/w300{
-                    poster_path}",
+                    'poster_path': f"https://image.tmdb.org/t/p/w300{poster_path}",
                     # 'seasons_count': seasons_count,
                     'release_date': release_date,
                     'genre': genre,
@@ -291,8 +290,7 @@ class GetAllSeries(ListAPIView):
                 response_list.append( {
                 'id': id,
                 "original_name": original_name,
-                'poster_path': f"https://image.tmdb.org/t/p/w300"
-                               f"/{poster_path}",
+                'poster_path': f"https://image.tmdb.org/t/p/w300{poster_path}",
                 'seasons_count': seasons_count,
                 'genre': genre,
                 'release_date': release_date,
