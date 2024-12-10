@@ -14,9 +14,9 @@ export default function Home() {
       <Navbar />
       <ShuffleHero />
       <div className="flex flex-col gap-y-40 w-full mx-auto">
-        <section className="mx-auto">
+        {/* <section className="mx-auto">
           <Subsection />
-        </section>
+        </section> */}
         <section className="mx-auto">
           <ExperienceContainer />
         </section>

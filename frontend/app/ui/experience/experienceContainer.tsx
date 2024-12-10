@@ -42,7 +42,7 @@ const ExperienceContainer = () => {
           entertainment.
         </p>
       </div>
-      <div className="grid grid-cols-3 w-full gap-5">
+      <div className="grid xs:grid-cols-1 lg:grid-cols-3 w-full gap-5">
         {Contents.map(({ title, content, icon }, count: number) => (
           <ExperienceCard
             title={title}

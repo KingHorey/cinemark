@@ -192,7 +192,7 @@ const ShuffleGrid = () => {
   };
 
   return (
-    <div className="grid grid-cols-7 gap-4 h-full w-screen gradient-mask-t-50-d absolute top-0 opacity-40 left-0">
+    <div className="grid xs:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-4 h-full w-screen gradient-mask-t-50-d absolute top-0 opacity-40 left-0">
       {squares.map((sq) => sq)}
     </div>
   );

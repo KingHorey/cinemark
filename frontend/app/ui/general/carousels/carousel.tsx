@@ -16,7 +16,7 @@ const Carousel = ({
   title: string;
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const ITEMS_PER_PAGE = 4;
+  const ITEMS_PER_PAGE = 5;
 
   const numberOfSlides =
     information?.length % 5 === 0
@@ -64,7 +64,7 @@ const Carousel = ({
           {Array.from({ length: numberOfSlides }).map((_, count: number) => (
             <div
               key={count}
-              className="grid xs:grid-cols-2 lg:grid-cols-4 grid-rows-1 gap-10 min-w-full "
+              className="grid xs:grid-cols-2 lg:grid-cols-5 grid-rows-1 p-2 lg:p-0 gap-2 md:gap-10 min-w-full "
             >
               {information
                 ?.slice(count * ITEMS_PER_PAGE, (count + 1) * ITEMS_PER_PAGE)

@@ -37,9 +37,9 @@ const MoviesContainer = async () => {
 
   return (
     <FieldSets title="Movies">
-      <Suspense fallback={<MovieGridSkeleton />}>
+      {/* <Suspense fallback={<MovieGridSkeleton />}>
         <GenreWrapper genres={availableGenres} />
-      </Suspense>
+      </Suspense> */}
       <Suspense fallback={<MovieGridSkeleton />}>
         <PopularMoviesWrapper popular={popularMovies} />
       </Suspense>

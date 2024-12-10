@@ -37,7 +37,7 @@ const UpcomingMoviesCarousel = ({
   };
   return (
     <section className="flex flex-col gap-y-10">
-      <div className="flex md:flex-row flex-col md:justify-between items-center">
+      <div className="flex md:flex-row flex-col xs:items-start xs:gap-y-5 md:justify-between items-center">
         <HeadingTwo text={title} />
         <div className="border border-gray-400/30 rounded-md bg-black flex items-center p-2 justify-between gap-x-2">
           <ArrowLeftIcon onClick={prevPage} size={18} stroke="white" />
@@ -65,7 +65,7 @@ const UpcomingMoviesCarousel = ({
           {Array.from({ length: numberOfSlides }).map((_, count: number) => (
             <div
               key={count}
-              className="grid xs:grid-cols-2 lg:grid-cols-5 grid-rows-1 gap-10 min-w-full "
+              className="grid xs:grid-cols-2 lg:grid-cols-5 grid-rows-1 p-2 lg:p-0 gap-2 md:gap-10 min-w-full "
             >
               {information
                 ?.slice(count * ITEMS_PER_PAGE, (count + 1) * ITEMS_PER_PAGE)

@@ -9,8 +9,7 @@ import { jwtDecode } from "jwt-decode";
 // export { auth as middleware } from "@/auth";
 // import { auth } from "@/auth";
 
-
-console.log(process.env.NEXT_BASE_URL)
+console.log(process.env.NEXT_BASE_URL);
 export const myAxios = axios.create({
   baseURL: process.env.NEXT_BASE_URL || "http://localhost:8000/api",
   headers: {
@@ -85,7 +84,7 @@ export async function middleware(request: NextRequest) {
 
 // Specify which routes this middleware should run on
 export const config = {
-  matcher: ["/", "/login", "/register", "/profile/:path*"],
+  matcher: ["/login", "/register", "/profile/:path*"],
 };
 
 // export default auth((req) => {
