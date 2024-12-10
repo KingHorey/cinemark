@@ -67,8 +67,8 @@ const Navbar = () => {
         >
           <MenuIcon stroke="white" fill="white" className="items-end" />
           {sideBar && (
-            <div className="absolute right-0 bg-offBlack w-full z-[999%]">
-              <div className="text-white flex flex-col w-full gap-y-5 p-3 z-[999]">
+            <div className="absolute z-10 right-0 backdrop-blur-lg w-full ">
+              <div className="text-white flex flex-col w-full gap-y-5 p-3 ">
                 {navLinks.map((link, count: number) => (
                   <Link
                     href={link.href}

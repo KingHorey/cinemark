@@ -45,12 +45,12 @@ const SearchBar = ({
 
   return (
     <div
-      className="w-full md:absolute left-0 z-[900] backdrop-blur-lg h-[100px] top-0 flex items-center p-2 rounded-md"
+      className="w-full md:absolute left-0 backdrop-blur-lg h-[100px] top-0 flex items-center p-2 rounded-md z-50" // Added z-50
       onClick={handleClick}
     >
       <Form {...form}>
         <form
-          className="flex text-white xs:flex-col xs:space-y-4 md:space-y-0 md:flex-row lg:items-center lg:space-x-5 w-full"
+          className="flex text-white xs:flex-col xs:space-y-4 md:space-y-0 md:flex-row lg:items-center lg:space-x-5 w-full relative"
           onSubmit={form.handleSubmit(handleSearch)}
         >
           <div className="flex w-full xs:gap-x-3">
@@ -58,16 +58,18 @@ const SearchBar = ({
               name="category"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="w-[120px]">
+                <FormItem className="w-[120px] z-[999] relative ">
                   <FormControl>
                     <Select
                       onValueChange={(value) => field.onChange(value)}
                       value={field.value}
                     >
-                      <SelectTrigger className="border-gray-400/30 z-[999]">
+                      <SelectTrigger className="border-gray-400/30 z-[999] relative">
                         <SelectValue placeholder="Select Movie Type" />
                       </SelectTrigger>
-                      <SelectContent className="bg-offBlack hover:bg-offBlack text-white border-gray-400/30 z-[10000] relative">
+                      <SelectContent
+                        className="bg-offBlack hover:bg-offBlack text-white border-gray-400/30 relative md:absolute md:-bottom-28 cursor-pointer z-[1000000]" // Added z-[1000]
+                      >
                         <SelectItem
                           value="movies"
                           className="hover:bg-offBlack cursor-pointer"
