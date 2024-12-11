@@ -24,10 +24,21 @@ interface DirectorInfo {
   image: string;
 }
 
+interface Genre {
+  id: string;
+  name: string;
+}
+
+interface Language {
+  name: string;
+  iso_639_1: string;
+  english_name: string;
+}
+
 interface MovieDetailsCardProps {
   releaseYear: number;
-  languages: string[];
-  genres: string[];
+  languages: Language[];
+  genres: Genre[];
   rating: number;
   director: DirectorInfo;
 }
@@ -68,7 +79,7 @@ const MovieDetailsCard: React.FC<MovieDetailsCardProps> = ({
                       index === 0 ? "bg-mainBlack border-gray-400/30" : ""
                     } mr-2`}
                   >
-                    {lang}
+                    {lang.english_name}
                   </Badge>
                 ))}
               </div>
@@ -100,12 +111,12 @@ const MovieDetailsCard: React.FC<MovieDetailsCardProps> = ({
                 <h4>Genres</h4>
               </div>
               <div className="flex gap-5 flex-wrap">
-                {genres.map((genre, index) => (
+                {genres.map((genre: { id: string; name: string }, index) => (
                   <Badge
                     key={index}
                     className="bg-mainBlack border-gray-400/30 cursor-default select-none"
                   >
-                    {genre}
+                    {genre.name}
                   </Badge>
                 ))}
               </div>

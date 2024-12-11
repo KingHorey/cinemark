@@ -34,7 +34,9 @@ const Page = async ({ params }: { params: string }) => {
   const { data } = await myAxios.get(`/movies/info/${params}/`);
 
   const verifiedData = data.data;
+
   const { key, site } = verifiedData;
+
   let url = "";
   if (site === "YouTube") url = `https://www.youtube.com/embed/${key}`;
 
