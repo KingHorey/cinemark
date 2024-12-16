@@ -82,8 +82,8 @@ const ProfileWrapper = ({
                     <img
                       src={
                         field.value ||
-                        `http://localhost:8000${user.image}` ||
-                        "/images/anonymous-user.webp"
+                        `${process.env.NEXT_BASE_URL}${user.image}`
+                        // "/images/anonymous-user.webp"
                       }
                       className="w-full h-full rounded-full object-cover"
                       // default

@@ -11,8 +11,8 @@
   "/(main)/series/[id]/page": "app/(main)/series/[id]/page.js",
   "/(main)/subscriptions/page": "app/(main)/subscriptions/page.js",
   "/(main)/support/page": "app/(main)/support/page.js",
-  "/(main)/profile/(overview)/page": "app/(main)/profile/(overview)/page.js",
   "/(main)/profile/liked-videos/page": "app/(main)/profile/liked-videos/page.js",
+  "/(main)/profile/(overview)/page": "app/(main)/profile/(overview)/page.js",
   "/(main)/profile/preferences/page": "app/(main)/profile/preferences/page.js",
   "/(main)/profile/reviews/page": "app/(main)/profile/reviews/page.js"
 }

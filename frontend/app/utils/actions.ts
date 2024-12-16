@@ -115,6 +115,7 @@ export const handleUpdateUserInformation = async (
       message: "Profile successfully updated",
     };
   } catch (err: any) {
+    console.error("===> ", err.message);
     return {
       status: 400,
       message: Object.values(err.response.data.data).flat(),

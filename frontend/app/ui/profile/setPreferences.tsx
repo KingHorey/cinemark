@@ -34,7 +34,7 @@ const UpdatePreferences = ({
   const form = useForm({
     resolver: zodResolver(userPreferences),
     defaultValues: {
-      genre: preferences.genre, // Use the existing genre array as default
+      genre: preferences ? preferences.genre : [], // Use the existing genre array as default
     },
   });
 
