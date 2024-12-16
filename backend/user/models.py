@@ -60,7 +60,7 @@ class User(AbstractUser, PermissionsMixin):
 
 
     @image.setter
-    def imagec(self, value):
+    def image(self, value):
         self._image = value
 
     def __str__(self):
