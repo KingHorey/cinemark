@@ -40,6 +40,7 @@ const SeriesGrid = ({
           </CardContent>
         </CardContent>
       </Card>
+      {/* use the series_count to get the number of series */}
       {series?.map((series, key) => (
         <Card className="rounded-lg border bg-[#0f0f0f] border-gray-400/30 w-full text-white p-0">
           <CardContent className="p-2">
