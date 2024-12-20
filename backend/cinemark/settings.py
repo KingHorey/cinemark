@@ -90,6 +90,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -112,7 +113,7 @@ AUTH_USER_MODEL = 'user.User'
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://red-ctbe8ppopnds73enltmg:6379",
+        "LOCATION": "redis://localhost:6379",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             "TIMEOUT": 900
@@ -177,7 +178,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'cinemark.wsgi.application'
-
+ASGI_APPLICATION = "cinemark.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases

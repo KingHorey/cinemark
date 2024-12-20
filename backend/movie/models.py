@@ -53,6 +53,7 @@ class Genre(models.Model):
 class Series(Listing):
     original_name = models.CharField(max_length=300, unique=True)
     genre = models.ManyToManyField('Genre', related_name='series_genres')
+    number_of_seasons = models.IntegerField(default=0)
 
     class Meta:
         verbose_name = "series"

@@ -68,7 +68,7 @@ class SeasonSerializer(serializers.ModelSerializer):
 
 class SeriesSerializer(serializers.ModelSerializer):
     genre = GenreSerializer(many=True, queryset=Genre.objects.all())
-    seasons = SeasonSerializer(many=True)
+    # seasons = SeasonSerializer(many=True, )
     class Meta:
         model = Series
         fields = "__all__"
