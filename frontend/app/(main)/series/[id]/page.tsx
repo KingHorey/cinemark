@@ -36,7 +36,20 @@ const Page = async ({ params }: { params: string }) => {
   const { data } = await myAxios.get(`/series/info/${params}/`);
   // const verifiedData = seriesInfoSchema.safeParse(data.data);
   const verifiedData = data.data;
-  const { key, site } = verifiedData;
+  const { key, site, id, number_of_seasons } = verifiedData;
+
+  let urls = Array.from({ length: number_of_seasons }).map(
+    (_, index) => `season ${index}`
+  );
+  const seasons = await Promise.all(
+    Array.from({ length: number_of_seasons }, (_, index) =>
+      myAxios.get(`/series/info/seasons/${id}?season=${index + 1}`)
+    ).map(async (response) => {
+      const { data } = await response;
+      return data;
+    })
+  );
+
   let url = "";
   if (site === "YouTube") url = `https://www.youtube.com/embed/${key}`;
   return (
@@ -49,10 +62,7 @@ const Page = async ({ params }: { params: string }) => {
         />
       </MovieInformationWrapper>
       <div className="flex md:flex-row flex-col md:space-x-10 xs:space-y-10 md:space-y-0">
-        <SeriesGrid
-          overview={data.data.overview}
-          series={verifiedData.seasons}
-        />
+        <SeriesGrid overview={data.data.overview} series={seasons} />
         <MovieDetailsCard
           releaseYear={data.data.release_date}
           languages={data.data.language}

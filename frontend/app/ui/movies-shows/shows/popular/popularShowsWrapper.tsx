@@ -1,6 +1,5 @@
 import React from "react";
 
-import { genres } from "@/app/utils/requests";
 import { moviesOverviewSchema } from "@/app/utils/definitions";
 import { z } from "zod";
 import PopularShows from "./popularShows";

@@ -43,7 +43,7 @@ const MovieOverviewCard = ({ data }: { data: z.infer<typeof movieSchema> }) => {
               </p>
               {data?.genre && (
                 <Badge className="bg-black/40 border flex items-center justify-center border-gray-400/30">
-                  {data.genre.split("&")[0]}
+                  {/* {data.genre.split("&")[0]} */}
                 </Badge>
               )}
             </div>

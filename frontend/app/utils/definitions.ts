@@ -85,27 +85,17 @@ export const languageSchema = z.object({
   english_name: z.string(),
 });
 
-export const seriesSeasonsSchema = z.object({
-  seasons: z.array(
-    z.object({
+export const seriesSeasonsSchema = z.array(
+  z.object({
+    data: z.object({
       id: z.number(),
       air_date: z.date(),
       overview: z.string(),
       name: z.string(),
-      image: z.string().url(),
-      episodes: z.array(
-        z.object({
-          id: z.number(),
-          title: z.string(),
-          overview: z.string(),
-          runtime: z.number(),
-          episode_number: z.number(),
-          image: z.string().url(),
-        })
-      ),
-    })
-  ),
-});
+      json_episodes: z.string(),
+    }),
+  })
+);
 
 export const seriesInfoSchema = z.object({
   data: z.object({
