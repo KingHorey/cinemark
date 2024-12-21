@@ -1,4 +1,5 @@
-
+import asyncio
+import json
 from typing import List, Dict
 from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
 
@@ -18,9 +19,9 @@ from rest_framework.views import APIView
 from decouple import config
 from urllib3.exceptions import HTTPError
 
-from .serializers import MovieSerializer, SeriesSerializer
+from .serializers import MovieSerializer, SeriesSerializer, SeasonSerializer
 
-from .models import  Movie, Genre, Series
+from .models import Movie, Genre, Series, Season
 
 # Create your views here.
 
@@ -29,6 +30,13 @@ API_KEY = config("TMDB_API_KEY")
 
 
 class MiscOperations:
+    """ function that handles miscellaneous operations that are relevant for the data to be sent
+        1. handle_casts
+        2. handle_directors
+        3. generate_banner_url
+        4. generate_poster_path_url
+        5. extract_information
+    """
 
     @staticmethod
     def handle_casts(casts: List) -> List:
@@ -138,12 +146,16 @@ class MyHttpsFetcher:
     def build_tmdb_series_url(self, query_type: str = None,
                               query_page: int =
                               1, query_category: str = None, query_string:
-            str = None, series_id: int = None):
-        print(query_string)
+            str = None, series_id: int = None, season_number: int = None,
+                              episode_number: int = None):
         if query_string and query_category:
             url = f"{BASE_URL}/search/tv?query={query_string}"
+        elif series_id and season_number:
+            return (f"{BASE_URL}/tv/{series_id}/season/"
+                    f"{season_number}?append_to_response=videos%2Ccredits&language=en-US")
         elif series_id:
-            url = ""
+            # generate the url for the series
+            url = f"{BASE_URL}/tv/{series_id}?append_to_response=videos%2Ccredits&language=en-US"
         elif query_type:
             url = f"{BASE_URL}/tv/{query_type}?language=en-US&page={int(query_page)}"
         else:
@@ -184,7 +196,6 @@ class GetAllMovies(ListAPIView, MiscOperations):
         query_category = query.get('category', None)
         query_page = query.get('page', 1)
         possible_queries = ['popular', 'top_rated', 'upcoming']
-        query_by_string = []
         if query_type in possible_queries:
             return self.handle_query(query_type, query_page)
         elif query_string and query_category:
@@ -281,7 +292,7 @@ class GetMovieInfo(RetrieveAPIView, MiscOperations):
                             status=status.HTTP_200_OK)
 
 
-class GetAllSeries(ListAPIView):
+class GetAllSeries(ListAPIView, MiscOperations):
     my_httpx = MyHttpsFetcher()
 
     def get(self, request, *args, **kwargs):
@@ -307,7 +318,7 @@ class GetAllSeries(ListAPIView):
             built_url = self.my_httpx.build_tmdb_series_url(
                 query_page=query_page, query_type=query_type)
             response = self.my_httpx.fetch_data_and_parse(built_url)
-            response = self.get_necessary_data(response['results'],
+            response['results'] = self.get_necessary_data(response['results'],
                                                query_type="")
             cache.set(f"{query_type}_{query_page}_series", response)
             return Response({'data': response}, status=status.HTTP_200_OK)
@@ -319,7 +330,7 @@ class GetAllSeries(ListAPIView):
             built_url = self.my_httpx.build_tmdb_series_url(
                 query_category=query_category, query_string=query_string)
             response = self.my_httpx.fetch_data_and_parse(built_url)
-            response = self.get_necessary_data(response['results'],
+            response["results"] = self.get_necessary_data(response['results'],
                                                query_type="")
             cache.set(f"{query_string}_{query_category}_series", response)
             return Response({'data': response}, status=status.HTTP_200_OK)
@@ -371,8 +382,7 @@ class GetAllSeries(ListAPIView):
         return response_list
 
 
-
-class GetSeriesInfo(RetrieveAPIView):
+class GetSeriesInfo(RetrieveAPIView, MiscOperations):
     lookup_field = 'id'
     queryset = Series.objects.all()
     serializer_class = SeriesSerializer
@@ -405,16 +415,12 @@ class GetSeriesInfo(RetrieveAPIView):
             return
         series = self.queryset.filter(id=series_id).first()
         if series is None:
-            request = self.fetch_movie(series_id)
-            print(request)
-            if not request:
+            url = self.my_httpx.build_tmdb_series_url(series_id=series_id)
+            response = self.my_httpx.fetch_data_and_parse(url)
+            if not response:
                 return Response({'error': 'Failed to fetch series data'},
                                 status=status.HTTP_400_BAD_REQUEST)
-            filtered_data = self.get_necessary_data(request)
-            # series_information = self.get_series_info(series_id,
-            #                                           request.get(
-            #     'number_of_seasons', None))
-            # filtered_data['seasons'] = series_information
+            filtered_data = self.get_necessary_data(response)
             serializer = self.get_serializer(data=filtered_data)
             try:
                 serializer.is_valid(raise_exception=True)
@@ -466,9 +472,9 @@ class GetSeriesInfo(RetrieveAPIView):
                key = video.get('key', None)
                site = video.get('site', None)
        if poster_path:
-           poster_path = f"https://image.tmdb.org/t/p/original{poster_path}"
+           poster_path = MiscOperations.generate_banner_url(poster_path)
        if banner:
-           banner = f"https://image.tmdb.org/t/p/original{banner}"
+           banner = MiscOperations.generate_banner_url(banner)
        original_name = information.get('original_name', None)
        credits = information.get('credits', None)
        cast = ''
@@ -476,10 +482,10 @@ class GetSeriesInfo(RetrieveAPIView):
        if credits:
            cast = credits.get('cast', None)
            if cast:
-               cast = handle_casts(cast)
+               cast = MiscOperations.handle_casts(cast)
            crews = credits.get('crew', None)
            if crews:
-               director = handle_directors(crews)
+               director = MiscOperations.handle_directors(crews)
        data = {
             'id': id,
             'release_date': release_date,
@@ -513,7 +519,6 @@ class GetSeriesInfo(RetrieveAPIView):
                     'accept': 'application/json',
                     'Authorization': f'Bearer {API_KEY}'
                 })
-                print(request)
                 if request.status_code == 200:
                     json_data = request.json()
                     print(f'\n\t NUmber: {i} in {series_count}: ', json_data)
@@ -621,3 +626,64 @@ class GetSeriesInfo(RetrieveAPIView):
             return episode_list
         else:
             raise TypeError("Invalid data type passed")
+
+
+class GetSeasonInformation(ListAPIView, MiscOperations):
+    my_httpx = MyHttpsFetcher()
+    queryset = Season.objects.all()
+    serializer_class = SeasonSerializer
+
+    def get_queryset(self, series_id, season_number):
+        try:
+            queryset = Season.objects.get(id=series_id).seasons.get(
+            season_number=season_number)
+            return queryset
+        except Season.DoesNotExist as e:
+            return None
+
+    def fetch_data(self, url):
+        try:
+            response = self.my_httpx.fetch_data_and_parse(url)
+            return response
+        except httpx.HTTPStatusError as e:
+            raise HTTPError(f"Error getting data from TMDB {e}") from e
+        except httpx.RequestError as e:
+            raise HTTPError(f"Unable to make request: {e}") from e
+        except httpx.NetworkError as e:
+            raise HTTPError(f"Network error while trying to fetch data: "
+                            f"{e}") from e
+        except Exception as e:
+            raise HTTPError(f"An error occurred: {e}") from e
+
+
+    def get(self, request, *args, **kwargs):
+        """ url to get the episode information for the season """
+        params = request.query_params
+        season_number = params.get('season', None)
+        series_id = kwargs.get('id', None)
+        if series_id is None:
+            raise ValueError("Please provide a series id")
+        if season_number is None:
+            raise ValueError("Please provide a season number")
+        # check if series and season in DB
+        data = self.get_queryset(series_id, season_number)
+        if data:
+            serializer = self.get_serializer(data)
+            return Response({'data': serializer.data}, status=status.HTTP_200_OK)
+        url = self.my_httpx.build_tmdb_series_url(series_id=series_id,
+                                                  season_number=season_number)
+        response = self.fetch_data(url)
+        print(response.keys()) # _id, air_date, episodes, name, overview,
+        # id, poster_path, season_number, vote_average, credits, videos
+
+        json_responses = response.get('episodes', [])
+        response['json_episodes'] = json.dumps(json_responses)
+        response['series_id'] = series_id
+        serializer = self.get_serializer(data=response, context={
+            'series_id': series_id})
+        try:
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+        except serializers.ValidationError as e:
+            print(serializer.errors)
+        return Response({'data': serializer.data}, status=status.HTTP_200_OK)

@@ -65,6 +65,7 @@ class Series(Listing):
 
 class Season(models.Model):
     id = models.IntegerField(null=False, unique=True, primary_key=True)
+    season_number = models.IntegerField(default=1, null=False, blank=False)
     name = models.CharField(max_length=25)
     image = models.URLField(null=True)
     series = models.ForeignKey(Series, related_name='seasons', on_delete=models.CASCADE)
@@ -76,6 +77,7 @@ class Season(models.Model):
     director = models.JSONField(null=True)
     key = models.CharField(max_length=250, default='', null=True, blank=True)
     site = models.CharField(max_length=30, default='', null=True, blank=True)
+    json_episodes = models.JSONField(null=True, blank=True, default=dict)
 
 
     def __str__(self):

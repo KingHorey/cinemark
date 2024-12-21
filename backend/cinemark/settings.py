@@ -43,7 +43,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-'PAGE_SIZE': 100
+    'PAGE_SIZE': 100
 }
 
 SIMPLE_JWT = {
@@ -91,6 +91,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 INSTALLED_APPS = [
     'daphne',
+    'adrf',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -105,7 +106,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
-
 ]
 
 AUTH_USER_MODEL = 'user.User'
