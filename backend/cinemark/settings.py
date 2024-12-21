@@ -90,8 +90,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 INSTALLED_APPS = [
-    'daphne',
-    'adrf',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -178,7 +176,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'cinemark.wsgi.application'
-ASGI_APPLICATION = "cinemark.asgi.application"
+# ASGI_APPLICATION = "cinemark.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
